@@ -1,0 +1,29 @@
+language: php
+php:
+  - 7.1
+build:
+  ci:
+    - docker build --rm=true --pull=true --force-rm=true --build-arg AUTH=$AUTH --no-cache=true -t luckyraul/magento:source_$MAGE_VERSION .
+    - docker push luckyraul/magento:source_$MAGE_VERSION
+    - cp composer.* Clean/
+    - mkdir -p Clean/app/etc
+    - cp app/etc/config.php Clean/app/etc/config.php
+    - docker build --rm=true --pull=true --force-rm=true --build-arg AUTH=$AUTH --no-cache=true -t luckyraul/magento:$MAGE_VERSION Clean
+    - docker push luckyraul/magento:$MAGE_VERSION
+    - docker build --rm=true --pull=true --force-rm=true --no-cache=true -t luckyraul/magento:nginx-$MAGE_VERSION Nginx
+  push:
+    - docker tag luckyraul/magento:source_$MAGE_VERSION mygento/magento:source_$MAGE_VERSION
+    - docker push mygento/magento:source_$MAGE_VERSION
+    - docker tag luckyraul/magento:$MAGE_VERSION mygento/magento:$MAGE_VERSION
+    - docker push mygento/magento:$MAGE_VERSION
+    - docker push luckyraul/magento:nginx-$MAGE_VERSION
+
+integrations:
+    hub:
+      - integrationName: Docker
+        type: docker
+env:
+  matrix:
+    - MAGE_VERSION='2.3'
+  global:
+    - secure: FnEjlTW6glzAI+v08Pd1I/8DmyPxTMgEJWE+JTHHBb7VMJggqKWmwQK0gsBti0flLjWAPFtBJpgoIxo1l0ApCTgub0BUUXQApsKdKLtv6sB3qq9e7CvAWE9+YnOWBwQ9weub0PQuvDWVhUUs4snkh4ZVm5umxQr81521UiP4VG0NQ2iM6bmV6BWQSgTya80WV+awhTQt76su4Gjzu6NYbTW0NE5uIXFZBKYatMEFu33kILXd7MxVxA4lcqfrd+7/BuYV14ALa31dnzpIScT5vK0K54Bw4mGW5tvFxPq8+gzLp4BgYjZaUWCQoTDW8ZlL0J6oL4H+oehYv1YrbRhONw==
