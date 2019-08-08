@@ -24,7 +24,9 @@ ONBUILD ADD composer.json /var/www/magento/composer.json
 ONBUILD ADD composer.lock /var/www/magento/composer.lock
 ONBUILD ADD app/etc/config.php /var/www/magento/app/etc/config.php
 ONBUILD RUN gosu www-data echo "$AUTH" >> /var/www/magento/auth.json && \
-            cd /var/www/magento && gosu www-data composer install --no-dev --prefer-dist --no-interaction && \
+            cd /var/www/magento && chown www-data:www-data composer.json && \
+            chown www-data:www-data composer.lock && \
+            gosu www-data composer install --no-dev --prefer-dist --no-interaction && \
             rm -f /var/www/magento/auth.json
 ONBUILD RUN cd /var/www/magento && gosu www-data php bin/magento setup:di:compile -q
 ONBUILD RUN cd /var/www/magento && gosu www-data php bin/magento setup:stat:deploy -f $THEME_LANG -q
