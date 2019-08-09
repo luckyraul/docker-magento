@@ -2,7 +2,7 @@ FROM luckyraul/php:7.2-full
 
 MAINTAINER Nikita Tarasov <nikita@mygento.ru>
 
-RUN apt-get -qq update && apt-get -qqy install gosu && apt-get clean && \
+RUN apt-get -qq update && apt-get -qqy install gosu gettext-base && apt-get clean && \
     mkdir -p /var/www/magento/app/etc && \
     chown -R www-data:www-data /var/www/magento
 
