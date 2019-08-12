@@ -16,7 +16,7 @@ build:
     - docker push mygento/magento:source_$MAGE_VERSION
     - docker tag luckyraul/magento:$MAGE_VERSION mygento/magento:$MAGE_VERSION
     - docker push mygento/magento:$MAGE_VERSION
-    - docker push luckyraul/magento:nginx-$MAGE_VERSION
+    - docker push luckyraul/magento:nginx-$MAGE_VERSION    
 
 integrations:
     hub:
